@@ -1,4 +1,3 @@
-var should = require('should');
 "use strict";
 var mockRecorder = require('../index.js');
 
