@@ -27,7 +27,7 @@ var objectToMock = {
     arrayInArrayInArray: [[[]]],
     unrecorded: "Unrecorded values won't be part of the mock-replay"
 };
-var mockProxy = mockRecorder.recorder(objectToMock, "test", "teststate");
+var mockProxy = mockRecorder.recorder(objectToMock, "test");
 
 // let's record some properties
 mockProxy.null;
@@ -56,7 +56,6 @@ mockProxy.arrayInArrayInArray;
 
 var mock = mockRecorder.replay('test');
 
-console.log(Object.keys(mock))
 
 // have a look at your objects ans scalars
 console.log(mock);

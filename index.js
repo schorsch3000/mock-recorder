@@ -1,36 +1,37 @@
-"use strict";
+/*jshint esversion: 6 */
 var util = require('util');
-
 function md5(string) {
+    "use strict";
     var crypto = require('crypto');
     return crypto.createHash('md5').update(string).digest('hex');
 }
-
-module.export = {}
+module.export = {};
 var recordings = {};
 var recorder = function (obj, name) {
+    "use strict";
     var prox = Proxy.create({
         keys: function () {
-            recordings[name] = recordings[name] || {};
-            recordings[name]['$keys'] = Object.keys(obj);
-            return recordings[name]['$keys']
+            if (undefined === recordings[name]) {
+                recordings[name] = {};
+            }
+            recordings[name].__keys = Object.keys(obj);
+            return recordings[name].__keys;
 
         },
         getOwnPropertyDescriptor: function () {
             recordings[name] = recordings[name] || {};
-            recordings[name]['$getOwnPropertyDescriptor'] = Object.getOwnPropertyDescriptor(obj);
+            recordings[name].__getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor(obj);
 
-            return recordings[name]['$getOwnPropertyDescriptor'];
+            return recordings[name].__getOwnPropertyDescriptor;
         },
 
         get: function (me, keyName) {
-
             recordings[name] = recordings[name] || {};
             recordings[name][keyName] = recordings[name][keyName] || {};
             var retVal = obj[keyName];
             if (retVal === null) {
-
                 recordings[name][keyName].type = "null";
+                return null;
             } else if (typeof retVal === 'object' && retVal instanceof Array) {
                 recordings[name][keyName].type = "array";
                 for (var i = 0; i < retVal.length; i++) {
@@ -48,7 +49,7 @@ var recorder = function (obj, name) {
                     var key = md5(JSON.stringify(arguments));
                     recordings[name][keyName].values[key] = wrapperRetVal;
                     return wrapperRetVal;
-                }
+                };
             } else {
                 recordings[name][keyName].type = "scalar";
                 recordings[name][keyName].value = retVal;
@@ -58,12 +59,15 @@ var recorder = function (obj, name) {
     });
     if (obj instanceof Array) {
         for (var i = 0; i < obj.length; i++) {
-            //preloading
+            /* jshint ignore:start */
+            // we are loading array values via proxy, that results in a method-call, this is not useless!
             prox[i];
+            /* jshint ignore:end */
+
         }
     }
     return prox;
-}
+};
 
 
 var replay = function (name, body) {
@@ -71,28 +75,31 @@ var replay = function (name, body) {
     for (var k in recordings[name]) {
         var v = recordings[name][k];
         if (v.type === 'scalar') {
-            mock[k] = v.value
+            mock[k] = v.value;
         } else if (v.type === 'function') {
-            mock[k] = (function (args, name, k) {
+            // js-hint tells us not to make a function in a loop.
+            // but that's what we need here, we need to fill an object with methods.
+            // that is bad in production code, but we are generating a mock object for testing...
+            mock[k] = (function (args, name, k) { // jshint ignore:line
                 return function () {
                     var key = md5(JSON.stringify(arguments));
                     if (!(key in args)) {
-                        var prettyArgs = []
+                        var prettyArgs = [];
                         for (var i = 0; i < arguments.length; i++) {
                             prettyArgs.push(JSON.stringify(arguments[i]));
                         }
-                        throw "You don't have recorded " + k +
-                        '(' + prettyArgs.join(', ') + ')' + " in suite " + name
+                        throw new Error("You don't have recorded " + k +
+                            '(' + prettyArgs.join(', ') + ')' + " in suite " + name);
                     }
                     return args[key];
-                }
+                };
             })(v.values, name, k);
         } else if (v.type === 'object') {
-            mock[k] = replay(name + '.' + k)
+            mock[k] = replay(name + '.' + k);
         } else if (v.type === 'null') {
             mock[k] = null;
         } else if (v.type === 'array') {
-            mock[k] = replay(name + '.' + k, [])
+            mock[k] = replay(name + '.' + k, []);
 
         }
     }
@@ -108,8 +115,8 @@ module.exports.getRecordings = function () {
     return recordings;
 };
 module.exports.setRecordings = function (rec) {
-    return recordings = rec;
+    return (recordings = rec);
 };
 module.exports.clearRecordings = function () {
-    return recordings = {};
+    return (recordings = {});
 };
