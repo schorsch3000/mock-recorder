@@ -1,4 +1,7 @@
 # mock-recorder
+![Build-Status](https://api.travis-ci.org/schorsch3000/mock-recorder.svg "Build-Status")
+
+
 
 Generate mock-objects by recording usage of the real Object.
 
@@ -45,4 +48,4 @@ When your test is done, switch to replay mode; dont forget to commit your mock-d
 
 
 ## TODO
-    Automagically generate a test for the mocked object from the mocking-data.
+Automagically generate a test for the mocked object from the mocking-data.
