@@ -33,3 +33,16 @@ console.log(mock.b(1,3));   // 4
 console.log(mock.b(5,3));   // 8
 
 ```
+
+There is spec/example.spec.js, that's not a real test but an example on how to use the convenience wrapper in your tests.
+You should run the test once in 'record' mode. It will store the mocking-data in ./mockStorage.
+Running the same test again in 'replay' mode will result in running with a mocked object. the whole lib will not be loaded.
+
+
+While working on your test's you should run in record mode, assuming your dependency works as intended.
+When your test is done, switch to replay mode; dont forget to commit your mock-data.
+
+
+
+## TODO
+    Automagically generate a test for the mocked object from the mocking-data.

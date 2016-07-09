@@ -1,5 +1,7 @@
 /*jshint esversion: 6 */
 var util = require('util');
+var fs = require('fs-extra');
+var path = require('path');
 function md5(string) {
     "use strict";
     var crypto = require('crypto');
@@ -111,12 +113,63 @@ var replay = function (name, body) {
 
 module.exports.replay = replay;
 module.exports.recorder = recorder;
-module.exports.getRecordings = function () {
+var getRecordings = module.exports.getRecordings = function () {
     return recordings;
 };
-module.exports.setRecordings = function (rec) {
+var setRecordings = module.exports.setRecordings = function (rec) {
     return (recordings = rec);
 };
 module.exports.clearRecordings = function () {
     return (recordings = {});
+};
+var config = module.exports.config = {
+    storagePath: './mockStorage',
+    testFolderName: 'spec'
+
+};
+
+var getStoragePath = function () {
+    "use strict";
+    fs.ensureDirSync(config.storagePath);
+    var storagePath = fs.realpathSync(config.storagePath).split('/');
+    var modulePath = module.parent.filename.split('/');
+
+    var segment;
+    while ((segment = modulePath.pop()) !== config.testFolderName) {
+        storagePath.push(segment);
+    }
+    storagePath.push(path.basename(storagePath.pop(), '.js') + '.json');
+    storagePath = storagePath.join('/');
+
+
+    var storageDir = storagePath.split('/');
+    storageDir.pop();
+    storageDir = storageDir.join('/');
+    fs.ensureDirSync(storageDir);
+
+    return storagePath;
+
+};
+
+var storagePath;
+
+module.exports.wrapper = function (mode, dependencyName, dependencyCallback) {
+    "use strict";
+    if (mode === 'replay') {
+        setRecordings(fs.readJsonSync(getStoragePath()));
+        return replay(dependencyName);
+    } else if (mode === 'record') {
+        storagePath = getStoragePath();
+        return recorder(dependencyCallback(), dependencyName);
+    } else {
+        throw new Error("mode should me either record or replay");
+    }
+
+
+};
+
+module.exports.saveWrapper = function () {
+    if (storagePath) {
+        fs.writeJsonSync(storagePath, getRecordings());
+    }
 };

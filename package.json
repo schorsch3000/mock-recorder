@@ -1,10 +1,10 @@
 {
   "name": "mock-recorder",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Record object behavior and generate replayable mocks.",
   "main": "index.js",
   "scripts": {
-    "test": "rm -rf node_modules; npm i && node --harmony-proxies ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node spec/&& jshint index.js"
+    "test": "node --harmony-proxies ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node spec/&& jshint index.js"
   },
   "author": "Dirk Heilig",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "jshint": "^2.9.2"
   },
   "dependencies": {
+    "fs-extra": "^0.30.0",
     "jasmine-node": "^1.14.5"
   }
 }

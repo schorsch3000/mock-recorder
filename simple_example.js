@@ -22,3 +22,4 @@ console.log(mock.a);        // 3
 console.log(mock.b(1,3));   // 4
 console.log(mock.b(5,3));   // 8
 
+mockRecorder.wrapper('replay')
