@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node --harmony-proxies ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node spec/&& jshint index.js",
-    "test-no-cover": "node --harmony-proxies ./node_modules/.bin/jasmine-node spec/"
+    "test-no-cover": "node --harmony-proxies node_modules/jasmine-node/lib/jasmine-node/cli.js spec/"
   },
   "author": "Dirk Heilig",
   "license": "ISC",
