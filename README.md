@@ -1,5 +1,6 @@
 # mock-recorder
-![Build-Status](https://api.travis-ci.org/schorsch3000/mock-recorder.svg "Build-Status")
+Travis (linux/osx) ![Build-Status](https://api.travis-ci.org/schorsch3000/mock-recorder.svg "Build-Status")
+appveyor (windows) ![Build-Status](https://ci.appveyor.com/api/projects/status/github/schorsch3000/mock-recorder?svg=true "Build-Status")
 
 
 
