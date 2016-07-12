@@ -1,6 +1,5 @@
 "use strict";
 var mockRecorder = require('../index.js');
-
 var objectToMock = {
     null: null,
     number: 1,
@@ -24,15 +23,11 @@ var objectToMock = {
         nestedObj: {nestedNestedNumber: 1},
         nestedArray: [1, 2, {nestception: 33}],
         nestedArrayWithObjGet: [1, 2, {nestception: 33}]
-
     },
     arrayInArrayInArray: [[[]]],
     unrecorded: "Unrecorded values won't be part of the mock-replay",
     d: new Date("2000-01-01")
 };
-
-
-
 
 describe("mockrecorder", function () {
     var recorder = mockRecorder.recorder(objectToMock, 'test');
@@ -41,7 +36,7 @@ describe("mockrecorder", function () {
         expect(recorder.d).toEqual(new Date("2000-01-01"))
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded', 'd']);
     });
     it("should proxy null", function () {
         expect(recorder.null).toBe(null);
@@ -84,7 +79,7 @@ describe("mockrecorder", function () {
         expect(recorder.obj.nestedObj.nestedNestedNumber).toBe(1);
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded', 'd']);
     });
 
 
@@ -174,8 +169,7 @@ describe("mockrecorder", function () {
     });
 
 
-    it("should handle date-objects correctly",function(){
+    it("should handle date-objects correctly", function () {
         console.log(mockRecorder.replay('import').date);
-
     })
 });
