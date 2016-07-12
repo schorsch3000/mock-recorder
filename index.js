@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+"use strict";
 var util = require('util');
 var fs = require('fs-extra');
 var path = require('path');
@@ -9,57 +10,61 @@ function md5(string) {
 }
 module.export = {};
 var recordings = {};
-var recorder = function (obj, name) {
+var recorder = function (file, obj, name) {
     "use strict";
     var prox = Proxy.create({
         keys: function () {
-            if (undefined === recordings[name]) {
-                recordings[name] = {};
+            if (undefined === recordings[file]) {
+                recordings[file] = [];
             }
-            recordings[name].__keys = Object.keys(obj);
-            return recordings[name].__keys;
+            if (undefined === recordings[file][name]) {
+                recordings[file][name] = {};
+            }
+            recordings[file][name].__keys = Object.keys(obj);
+            return recordings[file][name].__keys;
 
         },
         getOwnPropertyDescriptor: function () {
-            recordings[name] = recordings[name] || {};
-            recordings[name].__getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor(obj);
+            recordings[file][name] = recordings[file][name] || {};
+            recordings[file][name].__getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor(obj);
 
-            return recordings[name].__getOwnPropertyDescriptor;
+            return recordings[file][name].__getOwnPropertyDescriptor;
         },
 
         get: function (me, keyName) {
-            recordings[name] = recordings[name] || {};
-            recordings[name][keyName] = recordings[name][keyName] || {};
+            recordings[file] = recordings[file] || [];
+            recordings[file][name] = recordings[file][name] || {};
+            recordings[file][name][keyName] = recordings[file][name][keyName] || {};
             var retVal = obj[keyName];
             if (retVal === null) {
-                recordings[name][keyName].type = "null";
+                recordings[file][name][keyName].type = "null";
                 return null;
             } else if (typeof retVal === 'object' && retVal instanceof Date) {
-                recordings[name][keyName].type = "date";
-                recordings[name][keyName].value = retVal;
+                recordings[file][name][keyName].type = "date";
+                recordings[file][name][keyName].value = retVal;
                 return retVal;
 
             } else if (typeof retVal === 'object' && retVal instanceof Array) {
-                recordings[name][keyName].type = "array";
+                recordings[file][name][keyName].type = "array";
                 for (var i = 0; i < retVal.length; i++) {
-                    return recorder(retVal, name + '.' + keyName);
+                    return recorder(file, retVal, name + '.' + keyName);
                 }
 
             } else if (typeof retVal === 'object') {
-                recordings[name][keyName].type = "object";
-                return recorder(retVal, name + '.' + keyName);
+                recordings[file][name][keyName].type = "object";
+                return recorder(file, retVal, name + '.' + keyName);
             } else if (typeof retVal === 'function') {
-                recordings[name][keyName].type = "function";
-                recordings[name][keyName].values = recordings[name][keyName].values || {};
+                recordings[file][name][keyName].type = "function";
+                recordings[file][name][keyName].values = recordings[file][name][keyName].values || {};
                 return function () {
                     var wrapperRetVal = obj[keyName](...arguments);
                     var key = md5(JSON.stringify(arguments));
-                    recordings[name][keyName].values[key] = wrapperRetVal;
+                    recordings[file][name][keyName].values[key] = wrapperRetVal;
                     return wrapperRetVal;
                 };
             } else {
-                recordings[name][keyName].type = "scalar";
-                recordings[name][keyName].value = retVal;
+                recordings[file][name][keyName].type = "scalar";
+                recordings[file][name][keyName].value = retVal;
                 return retVal;
             }
         }
@@ -73,14 +78,15 @@ var recorder = function (obj, name) {
 
         }
     }
+
     return prox;
 };
 
 
-var replay = function (name, body) {
+var replay = function (file, name, body) {
     var mock = body || {};
-    for (var k in recordings[name]) {
-        var v = recordings[name][k];
+    for (var k in recordings[file][name]) {
+        var v = recordings[file][name][k];
         if (v.type === 'scalar') {
             mock[k] = v.value;
         } else if (v.type === 'function') {
@@ -102,39 +108,41 @@ var replay = function (name, body) {
                 };
             })(v.values, name, k);
         } else if (v.type === 'object') {
-            mock[k] = replay(name + '.' + k);
+            mock[k] = replay(file, name + '.' + k);
         } else if (v.type === 'null') {
             mock[k] = null;
         } else if (v.type === 'array') {
-            mock[k] = replay(name + '.' + k, []);
+            mock[k] = replay(file, name + '.' + k, []);
 
         } else if (v.type === 'date') {
             mock[k] = new Date(v.value);
         }
     }
 
-
     return mock;
-
-
 };
-
 
 module.exports.replay = replay;
 module.exports.recorder = recorder;
-var getRecordings = module.exports.getRecordings = function () {
-    return recordings;
+
+var getRecordings = module.exports.getRecordings = function (file) {
+    return recordings[file];
 };
-var setRecordings = module.exports.setRecordings = function (rec) {
-    return (recordings = rec);
+var setRecordings = module.exports.setRecordings = function (file, rec) {
+    return (recordings[file] = rec);
 };
-module.exports.clearRecordings = function () {
-    return (recordings = {});
+module.exports.clearRecordings = function (file) {
+    if(file) {
+      return (recordings[file] = {});
+    }
+    else {
+      return (recordings[file] = [])
+    }
 };
+
 var config = module.exports.config = {
     storagePath: './mockStorage',
     testFolderName: 'spec'
-
 };
 
 var getStoragePath = module.exports.getStoragePath = function () {
@@ -142,6 +150,7 @@ var getStoragePath = module.exports.getStoragePath = function () {
     fs.ensureDirSync(config.storagePath);
     var storagePath = [];
     var storagePathPrefix = fs.realpathSync(config.storagePath).replace(/\\/g, '/').split('/');
+    console.log('\n' + module.parent.filename)
     var modulePath = module.parent.filename.replace(/\\/g, '/').split('/');
 
     var segment;
@@ -162,25 +171,30 @@ var getStoragePath = module.exports.getStoragePath = function () {
 
 };
 
-var storagePath;
+class MockReplayer {
+  constructor(mode, dependencyName, dependencyCallback) {
+    this.storagePath = getStoragePath();
 
-module.exports.wrapper = function (mode, dependencyName, dependencyCallback) {
-    "use strict";
     if (mode === 'replay') {
-        setRecordings(fs.readJsonSync(getStoragePath()));
-        return replay(dependencyName);
+        this.setRecordings(this.storagePath, fs.readJsonSync(this.storagePath));
+        return replay(this.storagePath, dependencyName);
     } else if (mode === 'record') {
         storagePath = getStoragePath();
-        return recorder(dependencyCallback(), dependencyName);
+        return recorder(this.storagePath, dependencyCallback(), dependencyName);
     } else {
         throw new Error("mode should me either record or replay");
     }
+  }
 
-
-};
-
-module.exports.saveWrapper = function () {
-    if (storagePath) {
-        fs.writeJsonSync(storagePath, getRecordings());
+  save() {
+    if (this.storagePath) {
+        fs.writeJsonSync(this.storagePath, getRecordings(this.storagePath));
     }
-};
+  }
+}
+
+module.exports.Wrapper = MockReplayer;
+
+//The following is a workaround to make "module.parent" be the actual module
+//that required this file and not the module that required it first
+delete require.cache[__filename];
