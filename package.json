@@ -1,6 +1,6 @@
 {
   "name": "mock-recorder",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Record object behavior and generate replayable mocks.",
   "main": "index.js",
   "scripts": {

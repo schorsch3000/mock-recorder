@@ -128,19 +128,21 @@ var config = module.exports.config = {
 
 };
 
-var getStoragePath = function () {
+var getStoragePath=module.exports.getStoragePath= function () {
     "use strict";
     fs.ensureDirSync(config.storagePath);
-    var storagePath = fs.realpathSync(config.storagePath).split('/');
+    var storagePath=[];
+    var storagePathPrefix= fs.realpathSync(config.storagePath).split('/');
     var modulePath = module.parent.filename.replace(/\\/g,'/').split('/');
 
     var segment;
     while ((segment = modulePath.pop()) !== config.testFolderName) {
-        storagePath.push(segment);
+        storagePath.unshift(segment);
     }
+
     storagePath.push(path.basename(storagePath.pop(), '.js') + '.json');
     storagePath = storagePath.join('/');
-
+    storagePath=storagePathPrefix.join('/')+'/'+storagePath;
 
     var storageDir = storagePath.split('/');
     storageDir.pop();
