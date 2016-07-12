@@ -9,6 +9,38 @@ function md5(string) {
 }
 module.export = {};
 var recordings = {};
+var typeIdentifier = function(sth) {
+  if(sth instanceof Date) {
+    return 'Date';
+  }
+  else {
+    return 'other';
+  }
+}
+var typeSerializer = function(val) {
+  "use strict";
+  let type = typeIdentifier(val),
+      ret = {
+        type: type
+      };
+
+  switch(type) {
+    case 'Date':
+      ret.value = val.toString()
+    default:
+      ret.value = val;
+  }
+
+  return ret;
+}
+var typeDeserializer = function(obj) {
+  switch(obj.type) {
+    case 'Date':
+      return new Date(obj.value)
+    default:
+      return obj.value;
+  }
+}
 var recorder = function (obj, name) {
     "use strict";
     var prox = Proxy.create({
@@ -54,7 +86,7 @@ var recorder = function (obj, name) {
                 return function () {
                     var wrapperRetVal = obj[keyName](...arguments);
                     var key = md5(JSON.stringify(arguments));
-                    recordings[name][keyName].values[key] = wrapperRetVal;
+                    recordings[name][keyName].values[key] = typeSerializer(wrapperRetVal);
                     return wrapperRetVal;
                 };
             } else {
@@ -98,7 +130,7 @@ var replay = function (name, body) {
                         throw new Error("You don't have recorded " + k +
                             '(' + prettyArgs.join(', ') + ')' + " in suite " + name);
                     }
-                    return args[key];
+                    return typeDeserializer(args[key]);
                 };
             })(v.values, name, k);
         } else if (v.type === 'object') {

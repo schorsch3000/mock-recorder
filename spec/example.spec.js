@@ -14,7 +14,7 @@ var objectUnderTest = {
 }
 
 
-describe("simple object using 'complicated' lib", function () {
+xdescribe("simple object using 'complicated' lib", function () {
     var mockRecorder = require('../index.js');
     var complicatedLib = mockRecorder.wrapper('replay', 'my-complicated-lib-which-is-not-part-of-this-test', function () {
         return require('../complicatedLib.js');
