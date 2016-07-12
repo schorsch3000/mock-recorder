@@ -34,6 +34,11 @@ var recorder = function (obj, name) {
             if (retVal === null) {
                 recordings[name][keyName].type = "null";
                 return null;
+            } else if (typeof retVal === 'object' && retVal instanceof Date) {
+                recordings[name][keyName].type = "date";
+                recordings[name][keyName].value = retVal;
+                return retVal;
+
             } else if (typeof retVal === 'object' && retVal instanceof Array) {
                 recordings[name][keyName].type = "array";
                 for (var i = 0; i < retVal.length; i++) {
@@ -103,8 +108,12 @@ var replay = function (name, body) {
         } else if (v.type === 'array') {
             mock[k] = replay(name + '.' + k, []);
 
+        } else if (v.type === 'date') {
+            mock[k] = new Date(v.value);
         }
     }
+
+
     return mock;
 
 
@@ -128,12 +137,12 @@ var config = module.exports.config = {
 
 };
 
-var getStoragePath=module.exports.getStoragePath= function () {
+var getStoragePath = module.exports.getStoragePath = function () {
     "use strict";
     fs.ensureDirSync(config.storagePath);
-    var storagePath=[];
-    var storagePathPrefix= fs.realpathSync(config.storagePath).replace(/\\/g,'/').split('/');
-    var modulePath = module.parent.filename.replace(/\\/g,'/').split('/');
+    var storagePath = [];
+    var storagePathPrefix = fs.realpathSync(config.storagePath).replace(/\\/g, '/').split('/');
+    var modulePath = module.parent.filename.replace(/\\/g, '/').split('/');
 
     var segment;
     while ((segment = modulePath.pop()) !== config.testFolderName) {
@@ -142,7 +151,7 @@ var getStoragePath=module.exports.getStoragePath= function () {
 
     storagePath.push(path.basename(storagePath.pop(), '.js') + '.json');
     storagePath = storagePath.join('/');
-    storagePath=storagePathPrefix.join('/')+'/'+storagePath;
+    storagePath = storagePathPrefix.join('/') + '/' + storagePath;
 
     var storageDir = storagePath.split('/');
     storageDir.pop();
