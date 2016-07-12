@@ -28,7 +28,7 @@ var objectToMock = {
     unrecorded: "Unrecorded values won't be part of the mock-replay"
 };
 describe("mockrecorder", function () {
-    var recorder = mockRecorder.recorder(objectToMock, 'test');
+    mockRecorder.recorder(objectToMock, 'test');
     it("should get the long storagePath right", function () {
         var expectedPath = __filename.replace(/\\/g, '/').replace('/spec/', '/mockStorage/').replace(/\.js$/, '.json');
         expect(mockRecorder.getStoragePath()).toBe(expectedPath);

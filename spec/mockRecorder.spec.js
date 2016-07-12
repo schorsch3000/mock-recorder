@@ -161,7 +161,7 @@ describe("mockrecorder", function () {
     })
     it("should import  recordings", function () {
         mockRecorder.clearRecordings();
-        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}}})
+        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2},d: {type:"date",value:"1999-01-01"}}});
         expect(mockRecorder.replay('import').a).toBe(2)
     })
     it("should proxy Object.getOwnPropertyDescriptor()", function () {
@@ -170,6 +170,6 @@ describe("mockrecorder", function () {
 
 
     it("should handle date-objects correctly", function () {
-        console.log(mockRecorder.replay('import').date);
+        expect(mockRecorder.replay('import').d).toEqual(new Date("1999-01-01"))
     })
 });
