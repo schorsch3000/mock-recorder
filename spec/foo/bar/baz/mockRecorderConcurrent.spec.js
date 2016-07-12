@@ -23,6 +23,7 @@ var objectToMock = {
         nestedObj: {nestedNestedNumber: 1},
         nestedArray: [1, 2, {nestception: 33}],
         nestedArrayWithObjGet: [1, 2, {nestception: 33}]
+
     },
     arrayInArrayInArray: [[[]]],
     unrecorded: "Unrecorded values won't be part of the mock-replay"

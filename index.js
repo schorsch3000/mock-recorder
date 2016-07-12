@@ -216,3 +216,7 @@ module.exports.saveWrapper = function () {
         fs.writeJsonSync(storagePath, getRecordings());
     }
 };
+
+//The following is a workaround to make "module.parent" be the actual module
+//that required this file and not the module that required it first
+delete require.cache[__filename];

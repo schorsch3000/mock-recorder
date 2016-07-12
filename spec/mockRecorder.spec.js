@@ -1,6 +1,5 @@
 "use strict";
 var mockRecorder = require('../index.js');
-
 var objectToMock = {
     null: null,
     number: 1,
@@ -32,9 +31,6 @@ var objectToMock = {
     unrecorded: "Unrecorded values won't be part of the mock-replay",
     d: new Date("2000-01-01")
 };
-
-
-
 
 describe("mockrecorder", function () {
     var recorder = mockRecorder.recorder(objectToMock, 'test');
@@ -177,7 +173,7 @@ describe("mockrecorder", function () {
     })
     it("should import  recordings", function () {
         mockRecorder.clearRecordings();
-        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}}})
+        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}, d: {type: "date", value: "1999-01-01"}}});
         expect(mockRecorder.replay('import').a).toBe(2)
     })
     it("should proxy Object.getOwnPropertyDescriptor()", function () {
@@ -185,8 +181,11 @@ describe("mockrecorder", function () {
     });
 
 
-    it("should handle date-objects correctly",function(){
-        console.log(mockRecorder.replay('import').date);
+    it("should handle date-objects correctly", function () {
+        expect(mockRecorder.replay('import').d).toEqual(new Date("1999-01-01"))
+    })
 
+    it("shout throw on malformed mode", function () {
+        expect(function(){mockRecorder.wrapper("invalid")}).toThrow(new Error("mode should me either record or replay"));
     })
 });
