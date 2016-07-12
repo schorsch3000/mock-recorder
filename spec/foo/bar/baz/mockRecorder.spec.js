@@ -32,17 +32,15 @@ var objectToMock = {
 
 
 describe("mockrecorder", function () {
-  "use strict";
-    var recorder = mockRecorder.recorder("mockRecorder.spec.js", objectToMock, 'test');
+    var recorder = mockRecorder.recorder(objectToMock, 'test');
 
 
     it("should get the long storagePath right",function(){
-      "use strict";
         var expectedPath=__filename.replace(/\\/g,'/').replace('/spec/','/mockStorage/').replace(/\.js$/,'.json');
 
 
         expect(mockRecorder.getStoragePath()).toBe(expectedPath);
     })
 });
-//'/Volumes/external/git/mock-recorder/mockStorage/foo/bar/baz/mockRecorder.spec.json' to be
+//'/Volumes/external/git/mock-recorder/mockStorage/foo/bar/baz/mockRecorder.spec.json' to be 
 //'/Volumes/external/git/mock-recorder/mockStorage/example.spec.json'.

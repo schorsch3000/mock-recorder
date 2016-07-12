@@ -35,7 +35,7 @@ var objectToMock = {
 
 
 describe("mockrecorder", function () {
-    var recorder = mockRecorder.recorder('mockRecorder.spec.js', objectToMock, 'test');
+    var recorder = mockRecorder.recorder(objectToMock, 'test');
 
     it("should proxy dateObjects", function () {
         expect(recorder.d).toEqual(new Date("2000-01-01"))
@@ -89,52 +89,52 @@ describe("mockrecorder", function () {
 
 
     it("should replay null", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
         expect(replay.null).toBe(null);
     });
     it("should replay a boolean", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
         expect(replay.booleanTrue).toBe(true);
         expect(replay.booleanFalse).toBe(false);
     });
     it("should replay a number", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
         expect(replay.number).toBe(1);
     });
     it("should replay a string", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
         expect(replay.string).toBe('ww');
     });
     it("should replay a function", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
 
         expect(typeof replay.function_get).toBe('function')
     });
     it("should replay a function that's callable and recorded", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
         expect(replay.function_call(2, 1)).toBe(3)
     });
 
     it("should fail for unrecorded function calls", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
         expect(function () {
             replay.function_call(99, 88)
         }).toThrow(new Error("You don't have recorded function_call(99, 88) in suite test"))
     });
 
     it("should replay undefined values", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
 
         expect(replay.undef_set).toBeUndefined();
         expect(replay.undef_literaly).toBeUndefined();
     });
     it("should replay NaN values", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
 
         expect(replay.NaN).toBeNaN();
     });
     it("should replay Arrays", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
 
         expect(typeof replay.array).toBe('object');
         expect(replay.array.length).toBe(3);
@@ -144,7 +144,7 @@ describe("mockrecorder", function () {
         expect(replay.array[3]).toBeUndefined();
     });
     it("should replay Objects and it's recorded children", function () {
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        var replay = mockRecorder.replay('test');
 
         expect(typeof replay.obj).toBe('object');
         expect(replay.obj.unrecordedChild).toBeUndefined();
@@ -154,20 +154,20 @@ describe("mockrecorder", function () {
     });
 
     it("should clear it's recordings", function () {
-        mockRecorder.clearRecordings('mockRecorder.spec.js');
-        var replay = mockRecorder.replay('mockRecorder.spec.js', 'test');
+        mockRecorder.clearRecordings();
+        var replay = mockRecorder.replay('test');
         expect(replay).toEqual({});
     })
     it("should export it's recordings", function () {
-        mockRecorder.clearRecordings('mockRecorder.spec.js');
-        var recorder = mockRecorder.recorder('mockRecorder.spec.js', {a: 1}, 'export');
+        mockRecorder.clearRecordings();
+        var recorder = mockRecorder.recorder({a: 1}, 'export');
         recorder.a;
-        expect(mockRecorder.getRecordings('mockRecorder.spec.js')).toEqual({export: {a: {type: 'scalar', value: 1}}});
+        expect(mockRecorder.getRecordings()).toEqual({export: {a: {type: 'scalar', value: 1}}});
     })
     it("should import  recordings", function () {
-        mockRecorder.clearRecordings('mockRecorder.spec.js');
-        mockRecorder.setRecordings('mockRecorder.spec.js', {import: {a: {type: 'scalar', value: 2}}})
-        expect(mockRecorder.replay('mockRecorder.spec.js', 'import').a).toBe(2)
+        mockRecorder.clearRecordings();
+        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}}})
+        expect(mockRecorder.replay('import').a).toBe(2)
     })
     it("should proxy Object.getOwnPropertyDescriptor()", function () {
         expect(Object.getOwnPropertyDescriptor(recorder)).toBeUndefined()
@@ -175,7 +175,7 @@ describe("mockrecorder", function () {
 
 
     it("should handle date-objects correctly",function(){
-        console.log(mockRecorder.replay('mockRecorder.spec.js', 'import').date);
+        console.log(mockRecorder.replay('import').date);
 
     })
 });
