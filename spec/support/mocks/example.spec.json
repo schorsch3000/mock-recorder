@@ -1,0 +1,26 @@
+{
+  "my-complicated-lib-which-is-not-part-of-this-test": {
+    "a": {
+      "type": "scalar",
+      "value": 3
+    },
+    "b": {
+      "type": "function",
+      "values": {
+        "1d2871391829112d86552997d6ecc979": {
+          "type": "other",
+          "value": 100
+        }
+      }
+    },
+    "c": {
+      "type": "function",
+      "values": {
+        "99914b932bd37a50b983c5e7c90ae93b": {
+          "type": "Date",
+          "value": "Sat Jan 01 2000 01:00:00 GMT+0100 (CET)"
+        }
+      }
+    }
+  }
+}
