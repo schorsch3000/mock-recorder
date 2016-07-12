@@ -161,7 +161,7 @@ describe("mockrecorder", function () {
     })
     it("should import  recordings", function () {
         mockRecorder.clearRecordings();
-        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2},d: {type:"date",value:"1999-01-01"}}});
+        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}, d: {type: "date", value: "1999-01-01"}}});
         expect(mockRecorder.replay('import').a).toBe(2)
     })
     it("should proxy Object.getOwnPropertyDescriptor()", function () {
@@ -171,5 +171,9 @@ describe("mockrecorder", function () {
 
     it("should handle date-objects correctly", function () {
         expect(mockRecorder.replay('import').d).toEqual(new Date("1999-01-01"))
+    })
+
+    it("shout throw on malformed mode", function () {
+        expect(function(){mockRecorder.wrapper("invalid")}).toThrow(new Error("mode should me either record or replay"));
     })
 });
