@@ -38,9 +38,8 @@ describe("mockrecorder", function () {
     it("should get the long storagePath right",function(){
         var expectedPath=__filename.replace(/\\/g,'/').replace('/spec/','/mockStorage/').replace(/\.js$/,'.json');
 
-
         expect(mockRecorder.getStoragePath()).toBe(expectedPath);
     })
 });
-//'/Volumes/external/git/mock-recorder/mockStorage/foo/bar/baz/mockRecorder.spec.json' to be 
+//'/Volumes/external/git/mock-recorder/mockStorage/foo/bar/baz/mockRecorder.spec.json' to be
 //'/Volumes/external/git/mock-recorder/mockStorage/example.spec.json'.
