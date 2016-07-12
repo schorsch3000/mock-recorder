@@ -132,7 +132,7 @@ var getStoragePath=module.exports.getStoragePath= function () {
     "use strict";
     fs.ensureDirSync(config.storagePath);
     var storagePath=[];
-    var storagePathPrefix= fs.realpathSync(config.storagePath).split('/');
+    var storagePathPrefix= fs.realpathSync(config.storagePath).replace(/\\/g,'/').split('/');
     var modulePath = module.parent.filename.replace(/\\/g,'/').split('/');
 
     var segment;
