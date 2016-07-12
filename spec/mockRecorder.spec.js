@@ -9,6 +9,9 @@ var objectToMock = {
     function_call: function (a, b) {
         return a + b
     },
+    function_date: function () {
+        return new Date("2000-01-01")
+    },
     booleanTrue: true,
     booleanFalse: false,
     undef_set: undefined,
@@ -36,7 +39,7 @@ describe("mockrecorder", function () {
         expect(recorder.d).toEqual(new Date("2000-01-01"))
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded', 'd']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
     });
     it("should proxy null", function () {
         expect(recorder.null).toBe(null);
@@ -56,6 +59,10 @@ describe("mockrecorder", function () {
     });
     it("should proxy a function thats callable", function () {
         expect(recorder.function_call(2, 1)).toBe(3)
+    });
+    it("should proxy a function with the correct return-type", function () {
+        expect(recorder.function_date()).toEqual(new Date('2000-01-01'))
+        expect(recorder.function_date() instanceof Date).toBe(true)
     });
     it("should proxy undefined values", function () {
         expect(recorder.undef_set).toBeUndefined()
@@ -79,7 +86,7 @@ describe("mockrecorder", function () {
         expect(recorder.obj.nestedObj.nestedNestedNumber).toBe(1);
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded', 'd']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
     });
 
 
@@ -108,6 +115,11 @@ describe("mockrecorder", function () {
     it("should replay a function that's callable and recorded", function () {
         var replay = mockRecorder.replay('test');
         expect(replay.function_call(2, 1)).toBe(3)
+    });
+    it("should replay a function with the correct return-type", function () {
+        var replay = mockRecorder.replay('test');
+        expect(replay.function_date()).toEqual(new Date('2000-01-01'))
+        expect(replay.function_date() instanceof Date).toBe(true)
     });
 
     it("should fail for unrecorded function calls", function () {
