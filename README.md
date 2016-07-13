@@ -11,7 +11,7 @@ appveyor (windows) ![Build-Status](https://ci.appveyor.com/api/projects/status/g
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/?branch=master)
 
-![Code Coverage](https://codecov.io/gh/schorsch3000/mock-recorder/branch/master/graph/badge.svg)
+code coverage ![Code Coverage](https://codecov.io/gh/schorsch3000/mock-recorder/branch/master/graph/badge.svg "coverage")
 
 
 Generate mock-objects by recording usage of the real Object.
