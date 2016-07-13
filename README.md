@@ -1,10 +1,16 @@
 # mock-recorder
 Travis (linux/osx) ![Build-Status](https://api.travis-ci.org/schorsch3000/mock-recorder.svg "Build-Status")
+
 appveyor (windows) ![Build-Status](https://ci.appveyor.com/api/projects/status/github/schorsch3000/mock-recorder?svg=true "Build-Status")
+
 ![dependecy-status](https://david-dm.org/schorsch3000/mock-recorder/dev-status.svg "dependecy-status")
+
 ![dependecy-status](https://david-dm.org/schorsch3000/mock-recorder.svg "dependecy-status")
+
 [![Dependency Status](https://www.versioneye.com/user/projects/5785db606edb08004191de1c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5785db606edb08004191de1c)
+
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/?branch=master)
+
 [![Code Coverage](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/?branch=master)
 
 
