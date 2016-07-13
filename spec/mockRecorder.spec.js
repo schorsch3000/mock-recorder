@@ -1,6 +1,5 @@
 "use strict";
 var mockRecorder = require('../index.js');
-
 var objectToMock = {
     null: null,
     number: 1,
@@ -9,6 +8,9 @@ var objectToMock = {
     },
     function_call: function (a, b) {
         return a + b
+    },
+    function_date: function () {
+        return new Date("2000-01-01")
     },
     booleanTrue: true,
     booleanFalse: false,
@@ -24,15 +26,11 @@ var objectToMock = {
         nestedObj: {nestedNestedNumber: 1},
         nestedArray: [1, 2, {nestception: 33}],
         nestedArrayWithObjGet: [1, 2, {nestception: 33}]
-
     },
     arrayInArrayInArray: [[[]]],
     unrecorded: "Unrecorded values won't be part of the mock-replay",
     d: new Date("2000-01-01")
 };
-
-
-
 
 describe("mockrecorder", function () {
     var recorder = mockRecorder.recorder(objectToMock, 'test');
@@ -41,7 +39,7 @@ describe("mockrecorder", function () {
         expect(recorder.d).toEqual(new Date("2000-01-01"))
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
     });
     it("should proxy null", function () {
         expect(recorder.null).toBe(null);
@@ -61,6 +59,10 @@ describe("mockrecorder", function () {
     });
     it("should proxy a function thats callable", function () {
         expect(recorder.function_call(2, 1)).toBe(3)
+    });
+    it("should proxy a function with the correct return-type", function () {
+        expect(recorder.function_date()).toEqual(new Date('2000-01-01'))
+        expect(recorder.function_date() instanceof Date).toBe(true)
     });
     it("should proxy undefined values", function () {
         expect(recorder.undef_set).toBeUndefined()
@@ -84,7 +86,7 @@ describe("mockrecorder", function () {
         expect(recorder.obj.nestedObj.nestedNestedNumber).toBe(1);
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
     });
 
 
@@ -113,6 +115,11 @@ describe("mockrecorder", function () {
     it("should replay a function that's callable and recorded", function () {
         var replay = mockRecorder.replay('test');
         expect(replay.function_call(2, 1)).toBe(3)
+    });
+    it("should replay a function with the correct return-type", function () {
+        var replay = mockRecorder.replay('test');
+        expect(replay.function_date()).toEqual(new Date('2000-01-01'))
+        expect(replay.function_date() instanceof Date).toBe(true)
     });
 
     it("should fail for unrecorded function calls", function () {
@@ -166,7 +173,7 @@ describe("mockrecorder", function () {
     })
     it("should import  recordings", function () {
         mockRecorder.clearRecordings();
-        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}}})
+        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}, d: {type: "date", value: "1999-01-01"}}});
         expect(mockRecorder.replay('import').a).toBe(2)
     })
     it("should proxy Object.getOwnPropertyDescriptor()", function () {
@@ -174,8 +181,11 @@ describe("mockrecorder", function () {
     });
 
 
-    it("should handle date-objects correctly",function(){
-        console.log(mockRecorder.replay('import').date);
+    it("should handle date-objects correctly", function () {
+        expect(mockRecorder.replay('import').d).toEqual(new Date("1999-01-01"))
+    })
 
+    it("shout throw on malformed mode", function () {
+        expect(function(){mockRecorder.wrapper("invalid")}).toThrow(new Error("mode should me either record or replay"));
     })
 });
