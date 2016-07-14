@@ -7,8 +7,6 @@ appveyor (windows) ![Build-Status](https://ci.appveyor.com/api/projects/status/g
 
 ![dependecy-status](https://david-dm.org/schorsch3000/mock-recorder.svg "dependecy-status")
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/schorsch3000/mock-recorder/?branch=master)
-
 ![Code Coverage](https://codecov.io/gh/schorsch3000/mock-recorder/branch/master/graph/badge.svg "coverage")
 
 
