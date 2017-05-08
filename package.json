@@ -4,9 +4,9 @@
   "description": "Record object behavior and generate replayable mocks.",
   "main": "index.js",
   "scripts": {
-    "test": "touch mockStorage;rm -rf mockStorage;node --harmony-proxies ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node --verbose --color spec/&& jshint index.js",
-    "test-no-cover": "node --harmony-proxies node_modules/jasmine-node/lib/jasmine-node/cli.js spec/",
-    "clover": "node --harmony-proxies ./node_modules/.bin/istanbul cover --report clover -x \"**/spec/**\" jasmine-node spec/"
+    "test": "touch mockStorage;rm -rf mockStorage;node ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node --verbose --color spec/&& jshint index.js",
+    "test-no-cover": "node node_modules/jasmine-node/lib/jasmine-node/cli.js spec/",
+    "clover": "node ./node_modules/.bin/istanbul cover --report clover -x \"**/spec/**\" jasmine-node spec/"
   },
   "author": "Dirk Heilig",
   "license": "ISC",
