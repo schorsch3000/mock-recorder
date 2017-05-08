@@ -44,14 +44,13 @@ var typeDeserializer = function (obj) {
 };
 var recorder = function (obj, name) {
   "use strict";
-  var prox = Proxy.create({
+  var prox = new Proxy(obj, {
     keys: function () {
       if (undefined === recordings[name]) {
         recordings[name] = {};
       }
       recordings[name].__keys = Object.keys(obj);
       return recordings[name].__keys;
-
     },
     getOwnPropertyDescriptor: function () {
       recordings[name] = recordings[name] || {};

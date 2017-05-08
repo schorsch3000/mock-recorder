@@ -14,8 +14,6 @@ Generate mock-objects by recording usage of the real Object.
 
 See example.js or tests for usage.
 
-you need harmony-proxies, therefore you need to run node with the --harmony-proxies parameter, at least to record your mocks
-
 ```javascript
 
 "use strict";
