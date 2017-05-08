@@ -1,22 +1,22 @@
 {
   "name": "mock-recorder",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Record object behavior and generate replayable mocks.",
   "main": "index.js",
   "scripts": {
-    "test": "touch mockStorage;rm -rf mockStorage;node --harmony-proxies ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node spec/&& jshint index.js",
-    "test-no-cover": "node --harmony-proxies node_modules/jasmine-node/lib/jasmine-node/cli.js spec/"
+    "test": "touch mockStorage;rm -rf mockStorage;node --harmony-proxies ./node_modules/.bin/istanbul cover -x \"**/spec/**\" jasmine-node --verbose --color spec/&& jshint index.js",
+    "test-no-cover": "node --harmony-proxies node_modules/jasmine-node/lib/jasmine-node/cli.js spec/",
+    "clover": "node --harmony-proxies ./node_modules/.bin/istanbul cover --report clover -x \"**/spec/**\" jasmine-node spec/"
   },
   "author": "Dirk Heilig",
   "license": "ISC",
   "repository": "schorsch3000/mock-recorder",
   "devDependencies": {
     "istanbul": "^0.4.4",
-    "jshint": "^2.9.2",
-    "jasmine-node": "^1.14.5"
-
+    "jasmine-node": "^1.14.5",
+    "jshint": "^2.9.2"
   },
   "dependencies": {
-    "fs-extra": "^0.30.0"
+    "fs-extra": "^1.0.0"
   }
 }
