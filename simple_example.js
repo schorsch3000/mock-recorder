@@ -19,10 +19,10 @@ console.log(recorder.b(5, 3));   // 8
 
 var mock = mockRecorder.replay('test');
 
-console.log(recorder.d);        // 3
+console.log(recorder.d);        // 2000-01-01T00:00:00.000Z
 
 console.log(mock.a);        // 3
 console.log(mock.b(1, 3));   // 4
 console.log(mock.b(5, 3));   // 8
 
-mockRecorder.wrapper('replay')
+mockRecorder.wrapper('replay');
