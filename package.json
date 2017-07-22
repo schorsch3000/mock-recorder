@@ -9,6 +9,9 @@
     "clover": "node ./node_modules/.bin/istanbul cover --report clover -x \"**/spec/**\" jasmine-node spec/"
   },
   "author": "Dirk Heilig",
+  "contrributors":[
+    "Dennis Marschner"
+  ],
   "license": "ISC",
   "repository": "schorsch3000/mock-recorder",
   "devDependencies": {
