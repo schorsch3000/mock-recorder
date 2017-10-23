@@ -57,7 +57,7 @@ mockProxy.arrayInArrayInArray;
 var mock = mockRecorder.replay('test');
 
 
-// have a look at your objects ans scalars
+// have a look at your objects and scalars
 console.log(mock);
 
 // lets check some valid function calls
