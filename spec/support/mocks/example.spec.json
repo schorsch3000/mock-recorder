@@ -18,7 +18,19 @@
       "values": {
         "99914b932bd37a50b983c5e7c90ae93b": {
           "type": "Date",
-          "value": "Sat Jan 01 2000 01:00:00 GMT+0100 (CET)"
+          "value": "Sat Jan 01 2000 01:00:00 GMT+0100 (Mitteleuropäische Zeit)"
+        }
+      }
+    },
+    "inspect": {
+      "type": "scalar"
+    },
+    "d": {
+      "type": "function",
+      "values": {
+        "99914b932bd37a50b983c5e7c90ae93b": {
+          "type": "Date",
+          "value": "Mon Oct 29 2018 16:24:01 GMT+0100 (Mitteleuropäische Zeit)"
         }
       }
     }

@@ -9,7 +9,7 @@
     "clover": "node ./node_modules/.bin/istanbul cover --report clover -x \"**/spec/**\" jasmine-node spec/"
   },
   "author": "Dirk Heilig",
-  "contributors":[
+  "contributors": [
     "Dennis Marschner"
   ],
   "license": "ISC",

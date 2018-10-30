@@ -29,17 +29,21 @@ var objectToMock = {
     },
     arrayInArrayInArray: [[[]]],
     unrecorded: "Unrecorded values won't be part of the mock-replay",
-    d: new Date("2000-01-01")
+    d: new Date("2000-01-01"),
+    dt: new Date("2018-10-29T15:24:01.123Z")
 };
 
 describe("mockrecorder", function () {
     var recorder = mockRecorder.recorder(objectToMock, 'test');
 
     it("should proxy dateObjects", function () {
-        expect(recorder.d).toEqual(new Date("2000-01-01"))
+      expect(recorder.d).toEqual(new Date("2000-01-01"));
+    });
+    it("should proxy millisecond-accurate dateObjects", function () {
+      expect(recorder.dt).toEqual(new Date("2018-10-29T15:24:01.123Z"));
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded', 'd', 'dt']);
     });
     it("should proxy null", function () {
         expect(recorder.null).toBe(null);
@@ -86,7 +90,7 @@ describe("mockrecorder", function () {
         expect(recorder.obj.nestedObj.nestedNestedNumber).toBe(1);
     });
     it("should proxy Object.keys()", function () {
-        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d']);
+        expect(Object.keys(recorder)).toEqual(['null', 'number', 'string', 'function_get', 'function_call', 'function_date', 'booleanTrue', 'booleanFalse', 'undef_set', 'NaN', 'array', 'obj', 'arrayInArrayInArray', 'unrecorded','d', 'dt']);
     });
 
 
@@ -173,7 +177,7 @@ describe("mockrecorder", function () {
     })
     it("should import  recordings", function () {
         mockRecorder.clearRecordings();
-        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}, d: {type: "date", value: "1999-01-01"}}});
+        mockRecorder.setRecordings({import: {a: {type: 'scalar', value: 2}, d: {type: "date", value: "1999-01-01"}, dt: {type: "date", value: "2018-10-29T15:24:01.123Z"}}});
         expect(mockRecorder.replay('import').a).toBe(2)
     })
     it("should proxy Object.getOwnPropertyDescriptor()", function () {
@@ -184,8 +188,11 @@ describe("mockrecorder", function () {
     it("should handle date-objects correctly", function () {
         expect(mockRecorder.replay('import').d).toEqual(new Date("1999-01-01"))
     })
+    it("should handle millisecond-accurate date-objects correctly", function () {
+      expect(mockRecorder.replay('import').dt).toEqual(new Date("2018-10-29T15:24:01.123Z"))
+    })
 
     it("shout throw on malformed mode", function () {
-        expect(function(){mockRecorder.wrapper("invalid")}).toThrow(new Error("mode should me either record or replay"));
+        expect(function(){mockRecorder.wrapper("invalid")}).toThrow(new Error("mode should be either record or replay"));
     })
 });
