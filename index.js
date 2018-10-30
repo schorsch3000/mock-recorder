@@ -26,7 +26,7 @@ var typeSerializer = function (val) {
 
   switch (type) {
     case 'Date':
-      ret.value = val.toString();
+      ret.value = val.toISOString();
       break;
     default:
       ret.value = val;
