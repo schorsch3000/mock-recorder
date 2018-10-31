@@ -18,7 +18,16 @@
       "values": {
         "99914b932bd37a50b983c5e7c90ae93b": {
           "type": "Date",
-          "value": "Sat Jan 01 2000 01:00:00 GMT+0100 (CET)"
+          "value": "2000-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    "d": {
+      "type": "function",
+      "values": {
+        "99914b932bd37a50b983c5e7c90ae93b": {
+          "type": "Date",
+          "value": "2018-10-29T15:24:01.123Z"
         }
       }
     }

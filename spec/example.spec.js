@@ -10,6 +10,10 @@ var objectUnderTest = {
   c: function (complicatedLib) {
     "use strict";
     return complicatedLib.c();
+  },
+  d: function (complicatedLib) {
+    "use strict";
+    return complicatedLib.d();
   }
 };
 
@@ -29,6 +33,10 @@ describe("simple object using 'complicated' lib record mode", function () {
 
   it("should return a Date on c()", function () {
     expect(objectUnderTest.c(complicatedLib)).toEqual(new Date("2000-01-01"));
+  });
+
+  it("should return a millisecond-accurate Date on d()", function () {
+    expect(objectUnderTest.d(complicatedLib)).toEqual(new Date("2018-10-29T15:24:01.123Z"));
   });
 
   afterEach(mockRecorder.saveWrapper);
@@ -55,6 +63,10 @@ describe("simple object using 'complicated' lib replay mode", function () {
 
   it("should return a Date on c()", function () {
     expect(objectUnderTest.c(complicatedLib)).toEqual(new Date("2000-01-01"));
+  });
+
+  it("should return a millisecond-accurate Date on d()", function () {
+    expect(objectUnderTest.d(complicatedLib)).toEqual(new Date("2018-10-29T15:24:01.123Z"));
   });
 
   afterEach(mockRecorder.saveWrapper);

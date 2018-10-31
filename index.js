@@ -26,7 +26,7 @@ var typeSerializer = function (val) {
 
   switch (type) {
     case 'Date':
-      ret.value = val.toString();
+      ret.value = val.toISOString();
       break;
     default:
       ret.value = val;
@@ -205,7 +205,7 @@ module.exports.wrapper = function (mode, dependencyName, dependencyCallback) {
     storagePath = getStoragePath();
     return recorder(dependencyCallback(), dependencyName);
   } else {
-    throw new Error("mode should me either record or replay");
+    throw new Error("mode should be either record or replay");
   }
 
 

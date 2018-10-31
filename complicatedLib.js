@@ -7,6 +7,10 @@ module.exports = {
     c: function() {
         "use strict";
         return new Date('2000-01-01');
+    },
+    d: function() {
+      "use strict";
+      return new Date('2018-10-29T15:24:01.123Z');
     }
 }
 
